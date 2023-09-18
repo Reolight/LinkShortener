@@ -1,37 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import ShortenLinkForm from "./ShortenLinkForm";
-import { Redirect } from 'react-router-dom'
+import { useLoaderData } from 'react-router-dom';
 
 export function Home() {
     const [data, setData] = useState({ isLoading: true });
-    
-    useEffect(() => {
-        if (data.isLoading)
-        {
-            fetch('/links').then(response => {
-                if (response.ok)
-                {
-                    response.json().then(loaded => 
-                        setData({ isLoading: false, urls: loaded} )
-                    );
-                }
-            });
-        }
-        
-    }, [data.isLoading])
+    const urls = useLoaderData();
 
     const handleRemove = (shortUrl) => {
         fetch(`/links/${shortUrl}`, { method: 'delete'})
             .then(res => {
                 if (res.ok)
-                    setData({isLoading: true });
+                    window.location.reload();
                 else res.json().then(data=>console.error(data));
             }            
         );
     }
     
-    if (data.isLoading) return <p>Loading...</p>
-    if (!data.urls.length) return <div>
+    if (!urls.length) return <div>
         <i>Пока нет сокращенных ссылок</i>
         <ShortenLinkForm />
     </div>
@@ -50,7 +35,7 @@ export function Home() {
                 </tr>
             </thead>
             <tbody>
-                {data.urls.map((url, index) => {
+                {urls.map((url, index) => {
                     const shortenedUrl = `${window.location.origin}/${url.shortUrl}`;
                     return(<tr key={index}>
                         <td>{index+1}</td>
