@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkShortenerCore", "LinkSh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernateStore", "NHibernateStore\NHibernateStore.csproj", "{CB539662-E6E7-44D5-BA6D-B275C0FAC909}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stores", "Stores", "{7F7A7BEB-84DF-4D34-821B-CBB6CE951575}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreStore", "EFCoreStore\EFCoreStore.csproj", "{51B36189-ED89-473B-B786-23F6CFD571A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{CB539662-E6E7-44D5-BA6D-B275C0FAC909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB539662-E6E7-44D5-BA6D-B275C0FAC909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB539662-E6E7-44D5-BA6D-B275C0FAC909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51B36189-ED89-473B-B786-23F6CFD571A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B36189-ED89-473B-B786-23F6CFD571A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B36189-ED89-473B-B786-23F6CFD571A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B36189-ED89-473B-B786-23F6CFD571A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB539662-E6E7-44D5-BA6D-B275C0FAC909} = {7F7A7BEB-84DF-4D34-821B-CBB6CE951575}
+		{51B36189-ED89-473B-B786-23F6CFD571A5} = {7F7A7BEB-84DF-4D34-821B-CBB6CE951575}
 	EndGlobalSection
 EndGlobal

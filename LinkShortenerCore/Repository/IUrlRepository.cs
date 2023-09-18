@@ -4,9 +4,10 @@ namespace LinkShortenerCore.Repository;
 
 public interface IUrlRepository
 {
-    public UrlDto GetUrlInfo(string shortUrl);
-    public IEnumerable<UrlDto> GetAllUrlInfo();
-    public bool RemoveUrl(string shortUrl);
-    public UrlDto AddShortUrl(Uri fullUrl);
-    public UrlDto UpdateUrl(string shortUrl, Uri fullUrl);
+    public Task<UrlDto?> GetUrlInfo(string shortUrl);
+    public Task<IEnumerable<UrlDto>> GetAllUrlInfo();
+    public ValueTask<bool> RemoveUrl(string shortUrl);
+    public Task<UrlDto?> AddShortUrl(string shortUrl, string fullUrl);
+    public Task<UrlDto?> UpdateUrl(string shortUrl, string fullUrl);
+    public Task<string?> VisitUrl(string shortUrl);
 }

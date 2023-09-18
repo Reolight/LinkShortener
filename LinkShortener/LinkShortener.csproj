@@ -14,6 +14,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Mapster" Version="7.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.5" />
     </ItemGroup>
 
@@ -32,6 +33,12 @@
     <ItemGroup>
       <AdditionalFiles Include="Pages\Error.cshtml" />
       <AdditionalFiles Include="Pages\_ViewImports.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EFCoreStore\EFCoreStore.csproj" />
+      <ProjectReference Include="..\LinkShortenerCore\LinkShortenerCore.csproj" />
+      <ProjectReference Include="..\NHibernateStore\NHibernateStore.csproj" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

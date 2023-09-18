@@ -1,8 +1,19 @@
+using EFCoreStore;
+using LinkShortenerCore.Repository;
+using LinkShortenerCore.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+if (builder.Configuration.GetConnectionString("UrlContext") is not { } connectionString)
+    throw new NullReferenceException(
+        "No connection string provided. Provide connection string with name \"UrlContext\" and retry");
+
+builder.Services.AddMySqlWithEfCoreStore(connectionString);
+builder.Services.AddTransient<IUrlShortenerService, UrlShortenerMd5>();
+builder.Services.AddTransient<IUrlRepository, EfCoreRepository>();
 
 var app = builder.Build();
 
