@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import ShortenLinkForm from "./ShortenLinkForm";
+import { Redirect } from 'react-router-dom'
 
 export function Home() {
     const [data, setData] = useState({ isLoading: true });
@@ -57,7 +58,10 @@ export function Home() {
                         <td><a href={url.fullUrl}>{url.fullUrl}</a></td>
                         <td>{url.visitedTimes}</td>
                         <td>{url.creationTime}</td>
-                        <td><input type="button" value="X" onClick={()=> handleRemove(url.shortUrl)}/></td>
+                        <td className="control-td-row">
+                            <input type="button" value="X" onClick={()=> handleRemove(url.shortUrl)}/>
+                            <input type="button" value="V" />
+                        </td>
                     </tr>)
                 })}
             </tbody>
