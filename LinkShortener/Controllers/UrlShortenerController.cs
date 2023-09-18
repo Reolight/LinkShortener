@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LinkShortener.Controllers;
 
 [ApiController]
-[Route("/")]
+[Route("/links")]
 public class UrlShortenerController : ControllerBase
 {
     private readonly ILogger<UrlShortenerController> _logger;
@@ -20,20 +20,30 @@ public class UrlShortenerController : ControllerBase
         _shortener = shortener;
     }
 
-    [HttpGet, Route("{shortLink}")]
-    public async Task<ActionResult> GetShortUrl(string shortLink)
-    {
-        if (await _urlRepository.VisitUrl(shortLink) is not {  } fullUri)
-            return new NotFoundResult();
-        return new RedirectResult(fullUri);
-    }
+    [HttpGet]
+    public async Task<ActionResult> GetUrls() 
+        => Ok(await _urlRepository.GetAllUrlInfo());
 
-    [HttpPost, Route("shorten/{fullUrl}")]
-    public async Task<ActionResult> AddShortLink(string fullUrl)
+    [HttpGet, Route("{shortUrl}")]
+    public async Task<ActionResult> GetUrl(string shortUrl) =>
+            await _urlRepository.GetUrlInfo(shortUrl) is not { } urlDto
+                ? NotFound()
+                : Ok(urlDto);
+
+    [HttpPost]
+    public async Task<ActionResult> AddShortLink([FromForm] string fullUrl)
     {
         var urlDto = await _shortener.CreateShortLink(fullUrl);
         return urlDto == null
             ? BadRequest($"Short link for [{fullUrl}] is already created or collision occured")
-            : Created("/", urlDto);
+            : Created(string.Empty, urlDto);
+    }
+
+    [HttpDelete, Route("{shortUrl}")]
+    public async Task<ActionResult> DeleteShortLink(string shortUrl)
+    {
+        return await _urlRepository.RemoveUrl(shortUrl)
+            ? Accepted()
+            : NotFound($"Short url [{shortUrl}] not found");
     }
 }

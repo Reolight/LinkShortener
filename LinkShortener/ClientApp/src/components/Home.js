@@ -1,26 +1,69 @@
-import React, { Component } from 'react';
+import React, {useEffect, useState} from 'react';
+import ShortenLinkForm from "./ShortenLinkForm";
 
-export class Home extends Component {
-  static displayName = Home.name;
+export function Home() {
+    const [data, setData] = useState({ isLoading: true });
+    
+    useEffect(() => {
+        if (data.isLoading)
+        {
+            fetch('/links').then(response => {
+                if (response.ok)
+                {
+                    response.json().then(loaded => 
+                        setData({ isLoading: false, urls: loaded} )
+                    );
+                }
+            });
+        }
+        
+    }, [data.isLoading])
 
-  render() {
+    const handleRemove = (shortUrl) => {
+        fetch(`/links/${shortUrl}`, { method: 'delete'})
+            .then(res => {
+                if (res.ok)
+                    setData({isLoading: true });
+                else res.json().then(data=>console.error(data));
+            }            
+        );
+    }
+    
+    if (data.isLoading) return <p>Loading...</p>
+    if (!data.urls.length) return <div>
+        <i>Пока нет сокращенных ссылок</i>
+        <ShortenLinkForm />
+    </div>
+    
     return (
       <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Короткая ссылка</th>
+                    <th>Полная ссылка</th>
+                    <th>Кол-во переходов</th>
+                    <th>Дата создания</th>
+                    <th/>
+                </tr>
+            </thead>
+            <tbody>
+                {data.urls.map((url, index) => {
+                    const shortenedUrl = `${window.location.origin}/${url.shortUrl}`;
+                    return(<tr key={index}>
+                        <td>{index+1}</td>
+                        <td><a href={shortenedUrl}>{shortenedUrl}</a></td>
+                        <td><a href={url.fullUrl}>{url.fullUrl}</a></td>
+                        <td>{url.visitedTimes}</td>
+                        <td>{url.creationTime}</td>
+                        <td><input type="button" value="X" onClick={()=> handleRemove(url.shortUrl)}/></td>
+                    </tr>)
+                })}
+            </tbody>
+        </table>
+          
+          <ShortenLinkForm/>
       </div>
     );
-  }
 }

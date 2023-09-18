@@ -18,7 +18,10 @@ public class UrlShortenerMd5 : IUrlShortenerService
     {      
         using MD5 md5Encoder = MD5.Create();
         byte[] md5Link = md5Encoder.ComputeHash(Encoding.UTF8.GetBytes(fullUrl));
-        var @short = Encoding.UTF8.GetString(md5Link)
+        if (BitConverter.IsLittleEndian)
+            Array.Reverse(md5Link);
+        var @short = Convert
+            .ToBase64String(md5Link)
             .ToLowerInvariant()[..8];
         var urlDto = await _repository.AddShortUrl(@short, fullUrl);
         return urlDto;
