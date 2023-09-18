@@ -2,7 +2,7 @@
 
 namespace EFCoreStore.Entities;
 
-internal class Url
+public class Url
 {
     [Key]
     public string ShortUrl { get; set; }

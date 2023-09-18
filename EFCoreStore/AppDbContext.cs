@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreStore;
 
-internal class AppDbContext : DbContext
+public class AppDbContext : DbContext
 {
     public DbSet<Url> Urls { get; set; }
     

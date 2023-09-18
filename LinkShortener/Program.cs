@@ -12,8 +12,9 @@ if (builder.Configuration.GetConnectionString("UrlContext") is not { } connectio
         "No connection string provided. Provide connection string with name \"UrlContext\" and retry");
 
 builder.Services.AddMySqlWithEfCoreStore(connectionString);
+
+builder.Services.AddScoped<IUrlRepository, EfCoreRepository>();
 builder.Services.AddTransient<IUrlShortenerService, UrlShortenerMd5>();
-builder.Services.AddTransient<IUrlRepository, EfCoreRepository>();
 
 var app = builder.Build();
 

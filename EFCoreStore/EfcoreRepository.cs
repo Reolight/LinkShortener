@@ -1,8 +1,6 @@
 ﻿using EFCoreStore.Entities;
 using LinkShortenerCore.Model;
 using LinkShortenerCore.Repository;
-using Mapster;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreStore;
@@ -10,21 +8,19 @@ namespace EFCoreStore;
 public class EfCoreRepository : IUrlRepository
 {
     private readonly AppDbContext _context;
-    private readonly IMapper _mapster;
 
-    internal EfCoreRepository(AppDbContext context, IMapper mapster)
+    public EfCoreRepository(AppDbContext context)
     {
         _context = context;
-        _mapster = mapster;
     }
 
     public async Task<UrlDto?> GetUrlInfo(string shortUrl) => 
-        (await _context.Urls.FindAsync(shortUrl))?.Adapt<UrlDto>();
+        (await _context.Urls.FindAsync(shortUrl))?.AdaptToDto();
 
-    public async Task<IEnumerable<UrlDto>> GetAllUrlInfo() => 
+    public async Task<IEnumerable<UrlDto>> GetAllUrlInfo() =>
         await _context.Urls
-            .ProjectToType<UrlDto>()
             .AsNoTracking()
+            .Select(url => url.AdaptToDto())
             .ToListAsync();
 
     public async ValueTask<bool> RemoveUrl(string shortUrl)
@@ -51,7 +47,7 @@ public class EfCoreRepository : IUrlRepository
 
         var addedEntry =  _context.Urls.Add(url);
         await _context.SaveChangesAsync();
-        return addedEntry.Entity.Adapt<UrlDto>();
+        return addedEntry.Entity.AdaptToDto();
     }
 
     public async Task<UrlDto?> UpdateUrl(string shortUrl, string fullUrl)
@@ -59,9 +55,9 @@ public class EfCoreRepository : IUrlRepository
         if (await _context.Urls.FindAsync(shortUrl) is not { } updatedInstance)
             return null;
         new UrlDto{ FullUrl = fullUrl, CreationTime = DateTime.Now, ShortUrl = shortUrl, VisitedTimes = 0 }
-            .Adapt(updatedInstance);
+            .AdaptToEntity(updatedInstance);
         await _context.SaveChangesAsync();
-        return updatedInstance.Adapt<UrlDto>();
+        return updatedInstance.AdaptToDto();
     }
 
     public async Task<string?> VisitUrl(string shortUrl)
