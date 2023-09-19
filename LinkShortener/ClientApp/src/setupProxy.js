@@ -25,7 +25,7 @@ const filter = (pathname, req) => {
         shouldBeProxied = (pathMatches || regxMatches) && methodMatches;
         
         if (env.DEBUG)
-            console.debug(`For path [${pathname}] and case {\n\tpath: ${pattern.path}\n\tregx: ${pattern.regx}\n\tmethod: ${pattern.method}\n} made next checks: `
+            console.debug(`For path [${pathname}] & method [${req.method}].\nFor case {\n\tpath: ${pattern.path}\n\tregx: ${pattern.regx}\n\tmethod: ${pattern.method}\n} made next checks: `
                 + `path matches: ${pathMatches}, regx matches: ${regxMatches}, method matches: ${methodMatches}. Decision to proxy: ${shouldBeProxied}\n`)
         
         if (shouldBeProxied) return shouldBeProxied;

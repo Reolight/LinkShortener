@@ -1,6 +1,7 @@
 import { Home } from "./components/Home";
 import ShortenedView from "./components/ShortenedView";
 import {Layout} from "./components/Layout";
+import {redirect} from "react-router-dom";
 
 const AppRoutes = [
   {
@@ -22,7 +23,17 @@ const AppRoutes = [
       },
       {
         path: '/url/:link',
-        element: <ShortenedView />
+        element: <ShortenedView />,
+        loader: async ({params}) => {
+          let { link } = params;
+          const res = await fetch(`/links/${link}`);
+          if (!res.ok){
+            console.error(`Fetching short link [${link}] failed. Status code: ${res.statusCode}`);
+            return redirect('/');
+          }
+          
+          return await res.json();
+        }
       }]
   },
 ];

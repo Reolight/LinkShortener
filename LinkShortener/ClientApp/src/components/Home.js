@@ -45,7 +45,10 @@ export function Home() {
                         <td>{url.creationTime}</td>
                         <td className="control-td-row">
                             <input type="button" value="X" onClick={()=> handleRemove(url.shortUrl)}/>
-                            <input type="button" value="V" />
+                            <input type="button" value="V" onClick={()=> {
+                                const shortUrl = url.shortUrl;
+                                window.location.assign(`url/${shortUrl}`);
+                            }} />
                         </td>
                     </tr>)
                 })}
