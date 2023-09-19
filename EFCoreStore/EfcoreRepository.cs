@@ -93,7 +93,8 @@ public class EfCoreRepository : IUrlRepository
         new UrlDto{ FullUrl = newFullUrl, CreationTime = DateTime.Now, ShortUrl = shortUrlToUpdate, VisitedTimes = 0 }
             .AdaptToEntity(updatedInstance);
         await _context.SaveChangesAsync();
-        _logger.LogInformation("Url was updated: []");
+        _logger.LogInformation("Url was updated: [{ShortUrl}] now references to [{FullUrl}]",
+            shortUrlToUpdate, newFullUrl);
         return updatedInstance.AdaptToDto();
     }
 

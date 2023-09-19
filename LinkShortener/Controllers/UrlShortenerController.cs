@@ -43,7 +43,13 @@ public class UrlShortenerController : ControllerBase
     public async Task<ActionResult> DeleteShortLink(string shortUrl)
     {
         return await _urlRepository.RemoveUrl(shortUrl)
-            ? Accepted()
+            ? NoContent()
             : NotFound($"Short url [{shortUrl}] not found");
     }
+
+    [HttpPut, Route("{shortUrl}")]
+    public async Task<ActionResult> UpdateShortLink(string shortUrl, [FromBody] string newFullUrl) =>
+        await _urlRepository.UpdateUrl(shortUrl, newFullUrl) is not { } updatedUrl 
+            ? NotFound($"Url with short url [{shortUrl}] not found")
+            : Accepted(updatedUrl);
 }

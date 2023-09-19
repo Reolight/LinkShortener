@@ -1,7 +1,7 @@
-﻿using EFCoreStore.Entities;
-using LinkShortenerCore.Model;
+﻿using LinkShortenerCore.Model;
+using LinkShortenerStore.Entities;
 
-namespace EFCoreStore;
+namespace LinkShortenerStore;
 
 public static class Adapters
 {
