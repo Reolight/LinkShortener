@@ -1,12 +1,12 @@
-﻿using System.Configuration;
-using LinkShortenerStore.Mappers;
+﻿using LinkShortenerStore.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
-using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Mapping.ByCode;
+using NHibernate.Connection;
+using NHibernate.Driver;
 
 namespace LinkShortenerStore;
 
@@ -18,13 +18,16 @@ public static class DependencyInjectionExtension
         mapper.AddMapping<UrlMap>();
         HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
-        var config = new NHibernate.Cfg.Configuration();
+        var config = new Configuration();
         config.DataBaseIntegration(c =>
         {
             c.Dialect<MySQL5Dialect>();
-            c.SchemaAction = SchemaAutoAction.Update;
+            c.Driver<MySqlDataDriver>();
+            c.SchemaAction = SchemaAutoAction.Validate;
             c.ConnectionString = connectionString;
+            c.ConnectionProvider<DriverConnectionProvider>();
         });
+        
         config.AddMapping(domainMapping);
         
         var sessionFactory = config.BuildSessionFactory();
