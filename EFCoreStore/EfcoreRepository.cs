@@ -52,7 +52,8 @@ public class EfCoreRepository : IUrlRepository
     }
 
     /// <summary>
-    /// Добавляет сокращённую ссылку для перехода на сокращаемую 
+    /// Добавляет сокращённую ссылку для перехода на сокращаемую. Если для данной полной ссылки
+    /// уже была создана сокращённая, вернёт её
     /// </summary>
     /// <param name="shortUrl">Сокращённая ссылка</param>
     /// <param name="fullUrl">Сокращаемая ссылка</param>
@@ -62,15 +63,17 @@ public class EfCoreRepository : IUrlRepository
         if (await _context.Urls.FindAsync(shortUrl) != null)
             return null;
         
-        var url = new Url
-        {
+        if (await _context.Urls.FirstOrDefaultAsync(url =>
+                url.FullUrl == fullUrl) is { } existedUrl)
+            return existedUrl.AdaptToDto();
+        
+        var addedEntry =  _context.Urls.Add(new Url{
             ShortUrl = shortUrl, 
             FullUrl = fullUrl, 
             VisitedTimes = 0,
             CreationTime = DateTime.UtcNow, 
-        };
-
-        var addedEntry =  _context.Urls.Add(url);
+        });
+        
         await _context.SaveChangesAsync();
         _logger.LogInformation("Created new short url [{ShortUrl}] for [{FullUrl}]",
             addedEntry.Entity.ShortUrl, addedEntry.Entity.FullUrl);
@@ -81,7 +84,8 @@ public class EfCoreRepository : IUrlRepository
     /// <summary>
     /// Обновляет полную ссылку, но не изменяет короткую. Обновляет дату создания и обнуляет счётчик переходов.
     /// (Проверки на то, что было и что стало нет, потому что приложение не "комбайн"
-    /// и не учитывает вариант подмены ссылки на сайт с казино)
+    /// и не учитывает вариант подмены ссылки на сайт с казино).
+    /// Также возможна подмена на уже существующую полную ссылку
     /// </summary>
     /// <param name="shortUrlToUpdate">Короткая ссылка, у которой подменяется полная</param>
     /// <param name="newFullUrl">Новая ссылка, на которую будет редиректить данная короткая</param>

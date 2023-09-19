@@ -20,10 +20,15 @@ public class UrlShortenerMd5 : IUrlShortenerService
         byte[] md5Link = md5Encoder.ComputeHash(Encoding.UTF8.GetBytes(fullUrl));
         if (BitConverter.IsLittleEndian)
             Array.Reverse(md5Link);
-        var @short = Convert
-            .ToBase64String(md5Link)
-            .ToLowerInvariant()[..8];
-        var urlDto = await _repository.AddShortUrl(@short, fullUrl);
+        char[] rawUri = new char[8];
+        
+        // меняю проблемный символ (/) на - (и + заодно)
+        var shortUrl = new StringBuilder(Convert.ToBase64String(md5Link)[..8])
+            .Replace('/', '-')
+            .Replace('+', '_')
+            .ToString();
+
+        var urlDto = await _repository.AddShortUrl(shortUrl, fullUrl);
         return urlDto;
     }
 }

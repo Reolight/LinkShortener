@@ -31,7 +31,7 @@ public class UrlShortenerController : ControllerBase
                 : Ok(urlDto);
 
     [HttpPost]
-    public async Task<ActionResult> AddShortLink([FromForm] string fullUrl)
+    public async Task<ActionResult> AddShortLink([FromBody] string fullUrl)
     {
         var urlDto = await _shortener.CreateShortLink(fullUrl);
         return urlDto == null
