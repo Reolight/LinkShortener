@@ -7,6 +7,7 @@ using NHibernate.Dialect;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Connection;
 using NHibernate.Driver;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace LinkShortenerStore;
 
@@ -16,6 +17,7 @@ public static class DependencyInjectionExtension
     {
         var mapper = new ModelMapper();
         mapper.AddMapping<UrlMap>();
+        
         HbmMapping domainMapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
 
         var config = new Configuration();

@@ -3,6 +3,7 @@ using LinkShortenerCore.Repository;
 using LinkShortenerCore.Services;
 using LinkShortenerStore;
 
+var arguments = Environment.GetCommandLineArgs().Select(args => args.ToLowerInvariant());
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,10 +13,17 @@ if (builder.Configuration.GetConnectionString("UrlContext") is not { } connectio
     throw new NullReferenceException(
         "No connection string provided. Provide connection string with name \"UrlContext\" and retry");
 
-//builder.Services.AddMySqlWithEfCoreStore(connectionString);
-builder.Services.AddMySqlWithNHibernateStore(connectionString);
+if (arguments.Contains("-nhibernate"))
+{
+    builder.Services.AddMySqlWithNHibernateStore(connectionString);
+    builder.Services.AddScoped<IUrlRepository, NhibernateRepository>();
+}
+else
+{
+    builder.Services.AddMySqlWithEfCoreStore(connectionString);
+    builder.Services.AddScoped<IUrlRepository, EfCoreRepository>();
+}
 
-builder.Services.AddScoped<IUrlRepository, EfCoreRepository>();
 builder.Services.AddTransient<IUrlShortenerService, UrlShortenerMd5>();
 
 var app = builder.Build();
