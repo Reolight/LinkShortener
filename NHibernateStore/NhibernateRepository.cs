@@ -1,11 +1,11 @@
 ﻿using LinkShortenerCore.Model;
 using LinkShortenerCore.Repository;
-using LinkShortenerStore.Entities;
+using NhibernateStore.Entities;
 using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace LinkShortenerStore;
+namespace NhibernateStore;
 
 public class NhibernateRepository : IUrlRepository
 {

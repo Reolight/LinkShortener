@@ -1,4 +1,4 @@
-﻿namespace LinkShortenerStore.Entities;
+﻿namespace NhibernateStore.Entities;
 
 internal class Url
 {

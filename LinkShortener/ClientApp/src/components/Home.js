@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import ShortenLinkForm from "./ShortenLinkForm";
 import { useLoaderData } from 'react-router-dom';
 
 export function Home() {
-    const [data, setData] = useState({ isLoading: true });
     const urls = useLoaderData();
 
     const handleRemove = (shortUrl) => {

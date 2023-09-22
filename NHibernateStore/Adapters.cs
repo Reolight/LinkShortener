@@ -1,7 +1,7 @@
 ﻿using LinkShortenerCore.Model;
-using LinkShortenerStore.Entities;
+using NhibernateStore.Entities;
 
-namespace LinkShortenerStore;
+namespace NhibernateStore;
 
 public static class Adapters
 {

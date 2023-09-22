@@ -1,7 +1,7 @@
 using EFCoreStore;
 using LinkShortenerCore.Repository;
 using LinkShortenerCore.Services;
-using LinkShortenerStore;
+using NhibernateStore;
 
 var arguments = Environment.GetCommandLineArgs().Select(args => args.ToLowerInvariant());
 var builder = WebApplication.CreateBuilder(args);

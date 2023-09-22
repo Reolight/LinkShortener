@@ -1,8 +1,8 @@
-﻿using LinkShortenerStore.Entities;
+﻿using NhibernateStore.Entities;
 using NHibernate;
 using NHibernate.Mapping.ByCode.Conformist;
 
-namespace LinkShortenerStore.Mappers;
+namespace NhibernateStore.Mappers;
 
 internal class UrlMap : ClassMapping<Url>
 {

@@ -1,4 +1,4 @@
-﻿using LinkShortenerStore.Mappers;
+﻿using NhibernateStore.Mappers;
 using Microsoft.Extensions.DependencyInjection;
 using NHibernate;
 using NHibernate.Cfg;
@@ -9,7 +9,7 @@ using NHibernate.Connection;
 using NHibernate.Driver;
 using Environment = NHibernate.Cfg.Environment;
 
-namespace LinkShortenerStore;
+namespace NhibernateStore;
 
 public static class DependencyInjectionExtension
 {
