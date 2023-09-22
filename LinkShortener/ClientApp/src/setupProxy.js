@@ -11,7 +11,7 @@ const onError = (err, req, resp, target) => {
 
 const context = [
     { path: '/links' },
-    { regx: '^/[a-z0-9=-]+$'}
+    { regx: '^/[\-a-zA-Z0-9=_]+$'}
 ]
 
 const filter = (pathname, req) => {
